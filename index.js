@@ -139,8 +139,11 @@ class GW2 {
    */
 
   async request({ action, params, body, setErrors } = {}){
-    if (!(costants[action].endpoint && costants[action].method) ) {
-      throw new Error(`action: ${action} does not exist`)
+    if (
+      !costants[action] ||
+      !(costants[action].method && costants[action].endpoint)
+    ) {
+      throw new Error(`action: ${action} does not exist`);
     }
     try {
       const url = this.getUrl(costants[action].endpoint);
