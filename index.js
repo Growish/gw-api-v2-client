@@ -32,7 +32,7 @@ class GW2 {
    * @param {String} endpoint
    * this function concatenates the method endpoint to the base url of the API
    */
-  getUrl = (endpoint) => {
+    getUrl(endpoint) {
     return `${this.baseUrl}${endpoint}`;
   };
 
@@ -40,21 +40,21 @@ class GW2 {
    * @param {String} string
    * this function stores into localStorage -> (key:"token", value: input_token)
    */
-  setToken = (token, exp) => {
+  setToken(token, exp) {
     return window.localStorage.setItem('token', JSON.stringify(token, exp));
   };
 
   /**
    * this function returns token stored in localStorage
    */
-  getToken = () => {
+  getToken(){
     return JSON.parse(window.localStorage.getItem('token'));
   };
 
   /**
    * this function deletes the token stored in localStorage
    */
-  removeToken = () => {
+  removeToken(){
     return window.localStorage.removeItem('token');
   };
 
@@ -62,7 +62,7 @@ class GW2 {
    * @param object with security header config
    * @returns {import('axios').AxiosRequestConfig} config object
    */
-  getAxiosConfig = (options) => {
+  getAxiosConfig(options) {
     const config = { headers: {} };
     if (options) {
       if (options.apikey) {
@@ -77,7 +77,7 @@ class GW2 {
    * @param {String} password
    * @returns http response data
    */
-  login = async (credentials) => {
+  async login(credentials) {
     try {
       const endpoint = this.getUrl(costants.LOGIN.endpoint);
       const response = await axios.post(endpoint, credentials);
@@ -92,7 +92,7 @@ class GW2 {
   /**
    * @effects remove from localStorage the token, then redirects to homepage
    */
-  logout = async () => {
+  async logout() {
     try {
       const endpoint = this.getUrl(costants.LOGOUT.endpoint);
       const response = await axios.post(
@@ -113,7 +113,7 @@ class GW2 {
    * @param {user}
    * @returns
    */
-  register = async (user, setErrors) => {
+  async register(user, setErrors) {
     try {
       const endpoint = this.getUrl(costants.REGISTER.endpoint);
       const response = await axios.post(endpoint, user);
@@ -135,7 +135,7 @@ class GW2 {
    * @param {Function} setErrors function that saves the state of the errors in the react component
    */
 
-  request = async ({ action, params, body, setErrors } = {}) => {
+  async request({ action, params, body, setErrors } = {}){
     const url = this.getUrl(costants[action].endpoint);
     const headers = {
       'x-auth-token': this.getToken().token,
@@ -160,7 +160,7 @@ class GW2 {
    * @param {function} setErrors function that saves the state of the errors in the UI component
    * @return in case of functions are not provided, the function returns the error object
    */
-  handleAxiosError = (error, setErrors) => {
+  handleAxiosError(error, setErrors){
     switch (error.response.status) {
       case 401:
         return this.unauthFn ? this.unauthFn() : error;
