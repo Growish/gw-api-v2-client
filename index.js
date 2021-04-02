@@ -139,7 +139,7 @@ class GW2 {
    */
 
   async request({ action, params, body, setErrors } = {}){
-    if (costants[action].endpoint && costants[action].method ) {
+    if (!(costants[action].endpoint && costants[action].method) ) {
       throw new Error(`action: ${action} does not exist`)
     }
     try {
