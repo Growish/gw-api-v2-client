@@ -5,9 +5,10 @@ class GW2 {
   constructor({
     baseUrl,
     handleSucces,
-    unauthFn,
+    unauthorizedErr,
     defaultErr,
-    requestErr,
+    badRequestErr,
+    forbiddenErr,
     onLoginSuccess,
     onLoginError,
     onRegisterSuccess,
@@ -17,9 +18,10 @@ class GW2 {
   } = {}) {
     this.baseUrl = baseUrl;
     this.handleSucces = handleSucces;
-    this.unauthFn = unauthFn;
+    this.unauthorizedErr = unauthorizedErr;
     this.defaultErr = defaultErr;
-    this.requestErr = requestErr;
+    this.badRequestErr = badRequestErr;
+    this.forbiddenErr = forbiddenErr;
     this.onLoginSuccess = onLoginSuccess;
     this.onLoginError = onLoginError;
     this.onRegisterSuccess = onRegisterSuccess;
@@ -94,14 +96,15 @@ class GW2 {
    */
   async logout() {
     try {
+      const token = this.getToken();
+      this.removeToken();
       const endpoint = this.getUrl(costants.LOGOUT.endpoint);
       const response = await axios.post(
         endpoint,
         {},
-        this.getAxiosConfig({ apikey: this.getToken().token }),
+        this.getAxiosConfig({ apikey: token.token }),
       );
       const { data } = response.data;
-      this.removeToken();
       return this.onLogoutSuccess ? this.onLogoutSuccess() : data;
     } catch (error) {
       return this.onLogoutError ? this.onLogoutError(error) : error;
@@ -136,11 +139,14 @@ class GW2 {
    */
 
   async request({ action, params, body, setErrors } = {}){
-    const url = this.getUrl(costants[action].endpoint);
-    const headers = {
-      'x-auth-token': this.getToken().token,
-    };
+    if (costants[action].endpoint && costants[action].method ) {
+      throw new Error(`action: ${action} does not exist`)
+    }
     try {
+      const url = this.getUrl(costants[action].endpoint);
+      const headers = {
+        'x-auth-token': this.getToken().token,
+      };
       const response = await axios({
         method: costants[action].method,
         url,
@@ -162,10 +168,13 @@ class GW2 {
    */
   handleAxiosError(error, setErrors){
     switch (error.response.status) {
-      case 401:
-        return this.unauthFn ? this.unauthFn() : error;
       case 400:
-        return this.requestErr ? this.requestErr(error, setErrors) : error;
+        return this.badRequestErr ? this.badRequestErr(error, setErrors) : error;
+      case 401:
+        return this.unauthorizedErr ? this.unauthorizedErr() : error;
+      case 403:{
+        return this.forbiddenErr ? this.forbiddenErr() : error;
+      }
       default:
         return this.defaultErr ? this.defaultErr(error) : error;
     }
