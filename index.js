@@ -1,7 +1,7 @@
-import axios from 'axios';
-import costants from '../lib/methods';
+const axios=require('axios');
+const costants=require('./lib/methods');
 
-export class GW2 {
+class GW2 {
   constructor({
     baseUrl,
     handleSucces,
@@ -172,4 +172,4 @@ export class GW2 {
   };
 }
 
-export default GW2;
+module.exports= GW2;

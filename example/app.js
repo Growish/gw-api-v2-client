@@ -1,4 +1,4 @@
-import GW2 from '..index';
-import config from './config';
+const GW2 = require('../index');
+const config =require('./config');
 
-export default new GW2(config.options);
+module.exports = new GW2(config.options);
