@@ -1,7 +1,7 @@
 module.exports = {
     options: {
       baseUrl: 'https://apidev.growish.com/v2/client/girocredito/',
-      unauthFn: () => {
+      unauthorizedErr: () => {
         window.location.href = '/';
       },
       handleSucces: (data) => {
@@ -27,6 +27,8 @@ module.exports = {
       onLogoutError: (error) => {
         console.log(error);
       },
+      badRequestErr: () => {},
+      forbiddenErr: () => {},
     },
   };
   
