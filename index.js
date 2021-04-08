@@ -32,6 +32,7 @@ class GW2 {
 
   /**
    * @param {String} endpoint
+   * @param {object} params UrlParams such as {ID} or wallet/{ID}/something
    * this function concatenates the method endpoint to the base url of the API
    */
     getUrl(endpoint,params) {
@@ -141,6 +142,7 @@ class GW2 {
    * @param {object} params querystring params (axios appends to url every key=value)
    * @param {object} body   payload request body
    * @param {Function} setErrors function that saves the state of the errors in the react component
+   * @param {object} urlParams url paramateres such as {ID} or path/{ID}/path
    */
 
   async request({ action, params, body, setErrors,urlParams } = {}){

@@ -62,6 +62,7 @@ request method:
         params:Object,// object containing query string params
         body:Object,// object containing the payload request body
         setErrors:Function // function that saves the state of the errors in the UI component
+        urlParams:Object //  url paramateres such as {ID} or path/{ID}/path
     })
 ```
 EXAMPLE:
@@ -71,5 +72,6 @@ EXAMPLE:
         //for this action, PARAMS is not mandatory
         body:{currency: "EUR",goalAmount: 25000},
         setErrors:setErrors // this is a frontend function reference.
+        //for this action, urlParams is not mandatory
     })
 ```
