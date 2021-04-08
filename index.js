@@ -34,7 +34,12 @@ class GW2 {
    * @param {String} endpoint
    * this function concatenates the method endpoint to the base url of the API
    */
-    getUrl(endpoint) {
+    getUrl(endpoint,params) {
+      let finalEndpoint = endpoint
+
+      for (const [key, value] of Object.entries(params)) {
+        finalEndpoint.replace(`{${key}}`, value)
+      }
     return `${this.baseUrl}${endpoint}`;
   };
 
@@ -81,7 +86,7 @@ class GW2 {
    */
   async login(credentials) {
     try {
-      const endpoint = this.getUrl(costants.LOGIN.endpoint);
+      const endpoint = this.getUrl(costants.LOGIN.endpoint,{});
       const response = await axios.post(endpoint, credentials);
       const { data } = response.data;
       this.setToken({ token: data.token, exp: data.expireOn });
@@ -98,7 +103,7 @@ class GW2 {
     try {
       const token = this.getToken();
       this.removeToken();
-      const endpoint = this.getUrl(costants.LOGOUT.endpoint);
+      const endpoint = this.getUrl(costants.LOGOUT.endpoint,{});
       const response = await axios.post(
         endpoint,
         {},
@@ -118,7 +123,7 @@ class GW2 {
    */
   async register(user, setErrors) {
     try {
-      const endpoint = this.getUrl(costants.REGISTER.endpoint);
+      const endpoint = this.getUrl(costants.REGISTER.endpoint,{});
       const response = await axios.post(endpoint, user);
       const { data } = response.data;
       this.setToken(data.token);
@@ -138,7 +143,7 @@ class GW2 {
    * @param {Function} setErrors function that saves the state of the errors in the react component
    */
 
-  async request({ action, params, body, setErrors } = {}){
+  async request({ action, params, body, setErrors,urlParams } = {}){
     if (
       !costants[action] ||
       !(costants[action].method && costants[action].endpoint)
@@ -146,7 +151,7 @@ class GW2 {
       throw new Error(`action: ${action} does not exist`);
     }
     try {
-      const url = this.getUrl(costants[action].endpoint);
+      const url = this.getUrl(costants[action].endpoint,urlParams);
       const headers = {
         'x-auth-token': this.getToken().token,
       };
