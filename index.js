@@ -39,9 +39,9 @@ class GW2 {
       let finalEndpoint = endpoint
 
       for (const [key, value] of Object.entries(params)) {
-        finalEndpoint.replace(`{${key}}`, value)
+        finalEndpoint = finalEndpoint.replace(`{${key}}`, value)
       }
-    return `${this.baseUrl}${endpoint}`;
+    return `${this.baseUrl}${finalEndpoint}`;
   };
 
   /**
