@@ -154,9 +154,14 @@ class GW2 {
     }
     try {
       const url = this.getUrl(costants[action].endpoint,urlParams);
-      const headers = {
-        'x-auth-token': this.getToken().token,
-      };
+      const token = this.getToken()
+      let headers = {}
+      if(token){
+        headers = {
+          'x-auth-token': token.token,
+        }
+      }
+
       const response = await axios({
         method: costants[action].method,
         url,
