@@ -186,9 +186,9 @@ class GW2 {
       case 400:
         return this.badRequestErr ? this.badRequestErr(error, setErrors) : error;
       case 401:
-        return this.unauthorizedErr ? this.unauthorizedErr() : error;
+        return this.unauthorizedErr ? this.unauthorizedErr(error) : error;
       case 403:{
-        return this.forbiddenErr ? this.forbiddenErr() : error;
+        return this.forbiddenErr ? this.forbiddenErr(error) : error;
       }
       default:
         return this.defaultErr ? this.defaultErr(error) : error;
