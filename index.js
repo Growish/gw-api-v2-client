@@ -37,10 +37,12 @@ class GW2 {
    */
     getUrl(endpoint,params) {
       let finalEndpoint = endpoint
-
-      for (const [key, value] of Object.entries(params)) {
-        finalEndpoint = finalEndpoint.replace(`{${key}}`, value)
+      if (Object.keys(params).length){
+        for (const [key, value] of Object.entries(params)) {
+          finalEndpoint = finalEndpoint.replace(`{${key}}`, value)
+        }
       }
+
     return `${this.baseUrl}${finalEndpoint}`;
   };
 
