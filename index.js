@@ -172,7 +172,7 @@ class GW2 {
       const { data } = response.data;
       return this.handleSuccess ? this.handleSuccess(response) : data;
     } catch (err) {
-      this.handleAxiosError(err, setErrors);
+      return this.handleAxiosError(err, setErrors);
     }
   };
 
