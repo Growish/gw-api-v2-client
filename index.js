@@ -35,7 +35,7 @@ class GW2 {
    * @param {object} params UrlParams such as {ID} or wallet/{ID}/something
    * this function concatenates the method endpoint to the base url of the API
    */
-    getUrl(endpoint,params) {
+    getUrl(endpoint,params={}) {
       let finalEndpoint = endpoint
       if (Object.keys(params).length){
         for (const [key, value] of Object.entries(params)) {
@@ -82,12 +82,35 @@ class GW2 {
     return config;
   };
 
+  async auth(){
+    try {
+      const url = this.getUrl(costants.ME.endpoint,{});
+      const token = this.getToken()
+      let headers = {}
+      if(token){
+        headers = {
+          'x-auth-token': token.token,
+        }
+      }
+      const response = await axios({
+        method: costants.ME.method,
+        url,
+        headers,
+      });
+
+      const { data } = response.data;
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /**
    * @param {String} email
    * @param {String} password
    * @returns http response data
    */
-  async login(credentials) {
+  async login(credentials,setErrors) {
     try {
       const endpoint = this.getUrl(costants.LOGIN.endpoint,{});
       const response = await axios.post(endpoint, credentials);
@@ -95,7 +118,7 @@ class GW2 {
       this.setToken({ token: data.token, exp: data.expireOn });
       return this.onLoginSuccess ? this.onLoginSuccess() : data;
     } catch (error) {
-      return this.onLoginError ? this.onLoginError(error) : error;
+      return this.onLoginError ? this.onLoginError(error,setErrors) : error;
     }
   };
 
@@ -147,7 +170,7 @@ class GW2 {
    * @param {object} urlParams url paramateres such as {ID} or path/{ID}/path
    */
 
-  async request({ action, params, body, setErrors,urlParams } = {}){
+  async request({ action, params, body, setErrors,urlParams } = {urlParams:{},params:{}}){
     if (
       !costants[action] ||
       !(costants[action].method && costants[action].endpoint)
