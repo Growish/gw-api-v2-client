@@ -15,6 +15,7 @@ class GW2 {
     onRegisterError,
     onLogoutSuccess,
     onLogoutError,
+    tokenName,
   } = {}) {
     this.baseUrl = baseUrl;
     this.handleSucces = handleSucces;
@@ -28,6 +29,7 @@ class GW2 {
     this.onRegisterError = onRegisterError;
     this.onLogoutSuccess = onLogoutSuccess;
     this.onLogoutError = onLogoutError;
+    this.tokenName = tokenName
   }
 
   /**
@@ -76,7 +78,7 @@ class GW2 {
     const config = { headers: {} };
     if (options) {
       if (options.apikey) {
-        config.headers['x-auth-token'] = options.apikey;
+        config.headers[tokenName] = options.apikey;
       }
     }
     return config;
@@ -89,7 +91,7 @@ class GW2 {
       let headers = {}
       if(token){
         headers = {
-          'x-auth-token': token.token,
+          [`${this.tokenName}`]: token.token,
         }
       }
       const response = await axios({
@@ -183,7 +185,7 @@ class GW2 {
       let headers = {}
       if(token){
         headers = {
-          'x-auth-token': token.token,
+          [`${this.tokenName}`]: token.token,
         }
       }
 
