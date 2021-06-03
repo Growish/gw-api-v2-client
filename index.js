@@ -154,7 +154,6 @@ class GW2 {
       const endpoint = this.getUrl(costants.REGISTER.endpoint,{});
       const response = await axios.post(endpoint, user);
       const { data } = response.data;
-      this.setToken(data.token);
       return this.onRegisterSuccess ? this.onRegisterSuccess() : data;
     } catch (error) {
       return this.onRegisterError
