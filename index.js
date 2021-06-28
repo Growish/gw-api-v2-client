@@ -78,7 +78,7 @@ class GW2 {
     const config = { headers: {} };
     if (options) {
       if (options.apikey) {
-        config.headers[tokenName] = options.apikey;
+        config.headers[`${this.tokenName}`] = options.apikey;
       }
     }
     return config;
@@ -208,17 +208,22 @@ class GW2 {
    * @return in case of functions are not provided, the function returns the error object
    */
   handleAxiosError(error, setErrors){
-    switch (error.response.status) {
-      case 400:
-        return this.badRequestErr ? this.badRequestErr(error, setErrors) : error;
-      case 401:
-        return this.unauthorizedErr ? this.unauthorizedErr(error) : error;
-      case 403:{
-        return this.forbiddenErr ? this.forbiddenErr(error) : error;
+    if (erros.response) {
+      return this.defaultErr ? this.defaultErr(error) : error;
+    }else{
+      switch (error.response.status) {
+        case 400:
+          return this.badRequestErr ? this.badRequestErr(error, setErrors) : error;
+        case 401:
+          return this.unauthorizedErr ? this.unauthorizedErr(error) : error;
+        case 403:{
+          return this.forbiddenErr ? this.forbiddenErr(error) : error;
+        }
+        default:
+          return this.defaultErr ? this.defaultErr(error) : error;
       }
-      default:
-        return this.defaultErr ? this.defaultErr(error) : error;
     }
+
   };
 }
 
