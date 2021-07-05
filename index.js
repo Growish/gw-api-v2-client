@@ -213,7 +213,7 @@ class GW2 {
    * @return in case of functions are not provided, the function returns the error object
    */
   handleAxiosError(error, setErrors){
-    if (erros.response) {
+    if (error.response) {
       return this.defaultErr ? this.defaultErr(error) : error;
     }else{
       switch (error.response.status) {
