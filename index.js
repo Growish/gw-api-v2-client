@@ -154,6 +154,11 @@ class GW2 {
       const endpoint = this.getUrl(costants.REGISTER.endpoint,{});
       const response = await axios.post(endpoint, user);
       const { data } = response.data;
+
+      if (data.emailConfirmationRequired) {
+        this.setToken(data.token,data.expireOn)
+      }
+
       return this.onRegisterSuccess ? this.onRegisterSuccess() : data;
     } catch (error) {
       return this.onRegisterError
@@ -208,7 +213,7 @@ class GW2 {
    * @return in case of functions are not provided, the function returns the error object
    */
   handleAxiosError(error, setErrors){
-    if (error.response) {
+    if (erros.response) {
       return this.defaultErr ? this.defaultErr(error) : error;
     }else{
       switch (error.response.status) {
