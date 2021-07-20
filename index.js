@@ -155,7 +155,7 @@ class GW2 {
       const response = await axios.post(endpoint, user);
       const { data } = response.data;
 
-      if (data.emailConfirmationRequired) {
+      if (!data.emailConfirmationRequired) {
         this.setToken(data.token,data.expireOn)
       }
 
