@@ -156,7 +156,7 @@ class GW2 {
       const { data } = response.data;
 
       if (!data.emailConfirmationRequired) {
-        this.setToken(data.token,data.expireOn)
+        this.setToken({ token: data.token, exp: data.expireOn })
       }
 
       return this.onRegisterSuccess ? this.onRegisterSuccess() : data;
