@@ -176,7 +176,7 @@ class GW2 {
    * @param {object} urlParams url paramateres such as {ID} or path/{ID}/path
    */
 
-  async request({ action, params, body, setErrors,urlParams } = {urlParams:{},params:{}}){
+  async request({ action, params, body, setErrors,urlParams, pagination } = {urlParams:{},params:{}}){
     if (
       !costants[action] ||
       !(costants[action].method && costants[action].endpoint)
@@ -200,13 +200,19 @@ class GW2 {
         data: body,
         headers,
       });
-      const { data } = response.data;
+      let data
+      if (pagination===true) {
+        data=response.data
+      }else{
+        data = response.data.data
+      }
+      // const { data } = response.data;
       return this.handleSuccess ? this.handleSuccess(response) : data;
     } catch (err) {
       return this.handleAxiosError(err, setErrors);
     }
   };
-
+  
   /**
    * @param {object} err object representing the error object
    * @param {function} setErrors function that saves the state of the errors in the UI component
